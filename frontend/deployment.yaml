@@ -63,3 +63,39 @@ spec:
   dnsNames:
     - vargavendel.dev
     - www.vargavendel.dev
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vargavendel-frontend-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - vargavendel.dev
+        - www.vargavendel.dev
+      secretName: vargavendel-frontend-certificate
+  rules:
+    - host: vargavendel.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vargavendel-frontend-cluster-ip-service
+                port:
+                  number: 80
+    - host: www.vargavendel.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vargavendel-frontend-cluster-ip-service
+                port:
+                  number: 80

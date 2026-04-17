@@ -62,3 +62,28 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - api.vargavendel.dev
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vargavendel-backend-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - api.vargavendel.dev
+      secretName: vargavendel-backend-certificate
+  rules:
+    - host: api.vargavendel.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vargavendel-backend-cluster-ip-service
+                port:
+                  number: 3000
