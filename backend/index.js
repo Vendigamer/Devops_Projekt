@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const PORT = 3001;
 
 app.use(cors());
 
@@ -18,6 +17,6 @@ app.get('/api/quote', (req, res) => {
   res.json({ quote: quotes[randomIndex] });
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend listening on port ${PORT}`);
+app.listen(3000, () => {
+  console.log(`Backend listening on port 3000`);
 });
