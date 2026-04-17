@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vargavendel-backend-deployment
+  name: docker-backend-deployment
 spec:
   replicas: 1
   strategy:
@@ -11,16 +11,16 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: vargavendel-backend
+      app: docker-backend
   template:
     metadata:
       labels:
-        app: vargavendel-backend
+        app: docker-backend
     spec:
       imagePullSecrets:
         - name: ghcr-login-secret
       containers:
-        - name: vargavendel-backend
+        - name: docker-backend
           image: ghcr.io/vendigamer/vargavendel-backend:${IMAGE_TAG}
           imagePullPolicy: Always
           ports:
@@ -41,10 +41,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vargavendel-backend-cluster-ip-service
+  name: docker-backend-cluster-ip-service
 spec:
   selector:
-    app: vargavendel-backend
+    app: docker-backend
   type: ClusterIP
   ports:
     - protocol: TCP
@@ -54,36 +54,35 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: vargavendel-backend-certificate
+  name: docker-backend-certificate
 spec:
-  secretName: vargavendel-backend-certificate
+  secretName: docker-backend-certificate
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-    - api.vargavendel.dev
+    - idezet-vargavendel.jcloud.jedlik.cloud
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: vargavendel-backend-ingress
+  name: docker-backend-ingress
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - api.vargavendel.dev
-      secretName: vargavendel-backend-certificate
+      - idezet-vargavendel.jcloud.jedlik.cloud
+      secretName: docker-backend-certificate
   rules:
-    - host: api.vargavendel.dev
+    - host: idezet-vargavendel.jcloud.jedlik.cloud
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: vargavendel-backend-cluster-ip-service
+                name: docker-backend-cluster-ip-service
                 port:
                   number: 3000

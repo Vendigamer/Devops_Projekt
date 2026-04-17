@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vargavendel-frontend-deployment
+  name: docker-frontend-deployment
 spec:
   replicas: 1
   strategy:
@@ -11,16 +11,16 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: vargavendel-frontend
+      app: docker-frontend
   template:
     metadata:
       labels:
-        app: vargavendel-frontend
+        app: docker-frontend
     spec:
       imagePullSecrets:
         - name: ghcr-login-secret
       containers:
-        - name: vargavendel-frontend
+        - name: docker-frontend
           image: ghcr.io/vendigamer/vargavendel-frontend:${IMAGE_TAG}
           imagePullPolicy: Always
           ports:
@@ -41,10 +41,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vargavendel-frontend-cluster-ip-service
+  name: docker-frontend-cluster-ip-service
 spec:
   selector:
-    app: vargavendel-frontend
+    app: docker-frontend
   type: ClusterIP
   ports:
     - protocol: TCP
@@ -54,48 +54,35 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: vargavendel-frontend-certificate
+  name: docker-frontend-certificate
 spec:
-  secretName: vargavendel-frontend-certificate
+  secretName: docker-frontend-certificate
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-    - vargavendel.dev
-    - www.vargavendel.dev
+    - idezet-frontend-vargavendel.jcloud.jedlik.cloud
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: vargavendel-frontend-ingress
+  name: docker-frontend-ingress
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - vargavendel.dev
-        - www.vargavendel.dev
-      secretName: vargavendel-frontend-certificate
+      - idezet-frontend-vargavendel.jcloud.jedlik.cloud
+      secretName: docker-frontend-certificate
   rules:
-    - host: vargavendel.dev
+    - host: idezet-frontend-vargavendel.jcloud.jedlik.cloud
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: vargavendel-frontend-cluster-ip-service
-                port:
-                  number: 80
-    - host: www.vargavendel.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: vargavendel-frontend-cluster-ip-service
+                name: docker-frontend-cluster-ip-service
                 port:
                   number: 80
