@@ -27,13 +27,13 @@ spec:
             - containerPort: 3000
           readinessProbe:
             httpGet:
-              path: /api/name
+              path: /api/quote
               port: 3000
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /api/name
+              path: /api/quote
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 20
