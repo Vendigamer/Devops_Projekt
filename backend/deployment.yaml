@@ -21,7 +21,7 @@ spec:
         - name: ghcr-login-secret
       containers:
         - name: vargavendel-backend
-          image: ghcr.io/vargavendel/vargavendel-backend:${IMAGE_TAG}
+          image: ghcr.io/vendigamer/vargavendel-backend:${IMAGE_TAG}
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

@@ -37,8 +37,8 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ghcr.io/vargavendel/vargavendel-backend:${{ env.IMAGE_TAG }}
-            ghcr.io/vargavendel/vargavendel-backend:latest
+            ghcr.io/vendigamer/vargavendel-backend:${{ env.IMAGE_TAG }}
+            ghcr.io/vendigamer/vargavendel-backend:latest
 
       - name: Build and push Frontend image
         uses: docker/build-push-action@v5
@@ -47,8 +47,8 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: |
-            ghcr.io/vargavendel/vargavendel-frontend:${{ env.IMAGE_TAG }}
-            ghcr.io/vargavendel/vargavendel-frontend:latest
+            ghcr.io/vendigamer/vargavendel-frontend:${{ env.IMAGE_TAG }}
+            ghcr.io/vendigamer/vargavendel-frontend:latest
 
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
