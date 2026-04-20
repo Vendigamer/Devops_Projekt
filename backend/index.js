@@ -9,7 +9,8 @@ const quotes = [
   "A siker titka az, hogy soha ne add fel.",
   "A tudás hatalom.",
   "A türelem rózsát terem.",
-  "Aki mer, az nyer."
+  "Aki mer, az nyer.",
+  "Ha végeztem hazamehetek"
 ];
 
 app.get('/api/quote', (req, res) => {
